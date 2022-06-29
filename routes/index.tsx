@@ -8,7 +8,7 @@ import { Client } from "https://deno.land/x/postgres@v0.16.1/mod.ts";
 import ColorTile from "../components/ColorTile.tsx";
 
 const envConfig = await config();
-const databaseUrl = envConfig.DATABASE_URL;
+const databaseUrl = envConfig.DATABASE_URL || Deno.env.get('DATABASE_URL');
 const client = new Client(databaseUrl);
 
 interface RandomColor {
