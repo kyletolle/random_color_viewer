@@ -40,8 +40,8 @@ export const handler: Handlers<RandomColor> = {
     let now = "DB query didn't work";
     await client.connect();
     try {
-      const results = await client.queryArray("SELECT NOW()");
-      now = results.rows[0][0].toString() as string;
+      const results = await client.queryArray<[Date]>("SELECT NOW()");
+      now = results.rows[0][0].toLocaleString();
       console.log(now);
     } catch (err) {
       console.error("error executing query:", err);
