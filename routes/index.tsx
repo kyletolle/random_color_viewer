@@ -13,21 +13,12 @@ const client = new Client(databaseUrl);
 
 interface RandomColor {
   colors: string[];
+  now: string;
 }
 
 const NUM_COLORS = 5;
 
-
 (async () => {
-  await client.connect();
-  try {
-    const results = await client.queryArray("SELECT NOW()");
-    console.log(results.rows[0][0]);
-  } catch (err) {
-    console.error("error executing query:", err);
-  } finally {
-    await client.end();
-  }
 })();
 
 export const handler: Handlers<RandomColor> = {
@@ -46,7 +37,19 @@ export const handler: Handlers<RandomColor> = {
       colors.push(randomColor);
     }
 
-    return ctx.render({ colors });
+    let now = "DB query didn't work";
+    await client.connect();
+    try {
+      const results = await client.queryArray("SELECT NOW()");
+      now = results.rows[0][0].toString() as string;
+      console.log(now);
+    } catch (err) {
+      console.error("error executing query:", err);
+    } finally {
+      await client.end();
+    }
+
+    return ctx.render({ colors, now });
   }
 }
 
@@ -61,6 +64,7 @@ export default function Home({ data }: PageProps<RandomColor>) {
       <div style={{display: 'flex'}}>
         {data.colors.map(color => <ColorTile color={color} />)}
       </div>
+      <p>The time is currently {data.now}</p>
     </div>
   );
 }
