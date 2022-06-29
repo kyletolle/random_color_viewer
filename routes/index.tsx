@@ -4,7 +4,10 @@ import { tw } from "@twind";
 import { Handlers, PageProps } from "$fresh/server.ts";
 // import Counter from "../islands/Counter.tsx";
 import { config } from "https://deno.land/std@0.145.0/dotenv/mod.ts";
-import { Client } from "https://deno.land/x/postgres@v0.16.1/mod.ts";
+import { Client,
+  ConnectionError,
+  PostgresError,
+  TransactionError, } from "https://deno.land/x/postgres@v0.16.1/mod.ts";
 import ColorTile from "../components/ColorTile.tsx";
 
 const envConfig = await config();
@@ -39,10 +42,14 @@ export const handler: Handlers<RandomColor> = {
 
     let now = "DB query didn't work";
     await client.connect();
+
+    // TODO: Create the database, catch error if created?
+    // TODO: Create the table, catch error if created?
+
     try {
       const results = await client.queryArray<[Date]>("SELECT NOW()");
       now = results.rows[0][0].toLocaleString();
-      console.log(now);
+      console.log('Now is', now);
     } catch (err) {
       console.error("error executing query:", err);
     } finally {
@@ -65,7 +72,6 @@ export default function Home({ data }: PageProps<RandomColor>) {
         {data.colors.map(color => <ColorTile color={color} />)}
       </div>
       <p>The time is currently {data.now}</p>
-      <p>Hi all!</p>
     </div>
   );
 }
