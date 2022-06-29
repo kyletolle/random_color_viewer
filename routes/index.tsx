@@ -65,6 +65,7 @@ export default function Home({ data }: PageProps<RandomColor>) {
         {data.colors.map(color => <ColorTile color={color} />)}
       </div>
       <p>The time is currently {data.now}</p>
+      <p>Hi all!</p>
     </div>
   );
 }
