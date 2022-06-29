@@ -2,14 +2,33 @@
 import { h } from "preact";
 import { tw } from "@twind";
 import { Handlers, PageProps } from "$fresh/server.ts";
-import Counter from "../islands/Counter.tsx";
+// import Counter from "../islands/Counter.tsx";
+import { config } from "https://deno.land/std@0.145.0/dotenv/mod.ts";
+import { Client } from "https://deno.land/x/postgres@v0.16.1/mod.ts";
 import ColorTile from "../components/ColorTile.tsx";
+
+const envConfig = await config();
+const databaseUrl = envConfig.DATABASE_URL;
+const client = new Client(databaseUrl);
 
 interface RandomColor {
   colors: string[];
 }
 
 const NUM_COLORS = 5;
+
+
+(async () => {
+  await client.connect();
+  try {
+    const results = await client.queryArray("SELECT NOW()");
+    console.log(results.rows[0][0]);
+  } catch (err) {
+    console.error("error executing query:", err);
+  } finally {
+    await client.end();
+  }
+})();
 
 export const handler: Handlers<RandomColor> = {
   async GET(_, ctx) {
