@@ -6,8 +6,8 @@ interface ColorTileProps {
 }
 export default function ColorTile({ color }: ColorTileProps) {
   const styles = {
-    height: '20px',
-    width: '20px',
+    height: '40px',
+    width: '40px',
     backgroundColor: color
   };
 
