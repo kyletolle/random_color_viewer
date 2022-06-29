@@ -14,7 +14,7 @@ Once GitPod is up and running, you can install Fresh with
 deno run -A -r https://fresh.deno.dev .
 ```
 
-### Usage
+## Usage
 
 Start the project:
 
@@ -23,6 +23,10 @@ deno task start
 ```
 
 This will watch the project directory and restart as necessary.
+
+## Gitpod Stuff
+
+If you need to rebuild the gitpod env, you can hit this URL: `https://gitpod.io/#imagebuild/https://github.com/kyletolle/random_color_viewer`
 
 ## License
 
