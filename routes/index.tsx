@@ -18,12 +18,12 @@ export const handler: Handlers<RandomColor> = {
       const randomColorPayload = await fetch('https://kyletolle-random-color-api.deno.dev/');
       if (randomColorPayload.status !== 200) {
         const defaultColor = '#FFF';
+        console.warn('Color fetch did not work; falling back to white');
         colors.push(defaultColor);
         continue;
       }
 
       const randomColor = await randomColorPayload.text();
-      // console.info('randomColor', randomColor);
       colors.push(randomColor);
     }
 
@@ -34,11 +34,6 @@ export const handler: Handlers<RandomColor> = {
 export default function Home({ data }: PageProps<RandomColor>) {
   return (
     <div class={tw`p-4 mx-auto max-w-screen-md`}>
-      <img
-        src="/logo.svg"
-        height="100px"
-        alt="the fresh logo: a sliced lemon dripping with juice"
-      />
       <p class={tw`my-6`}>
         Welcome to random_color_viewer!
       </p>
