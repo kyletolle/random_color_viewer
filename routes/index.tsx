@@ -47,12 +47,9 @@ export default function Home({ data }: PageProps<RandomColor>) {
       <p class="my-6">
         Welcome to random_color_viewer!
       </p>
-      {/* <Counter start={3} /> */}
-      <p>Here should be {NUM_COLORS} color tiles...</p>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", flexWrap: 'wrap' }}>
         {data.colors.map((color) => <ColorTile color={color.hex_value as string} />)}
       </div>
-      <p>The time is currently {data.now}</p>
     </div>
   );
 }
