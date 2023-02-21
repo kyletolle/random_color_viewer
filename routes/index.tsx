@@ -1,19 +1,13 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import "https://deno.land/std@0.177.0/dotenv/load.ts";
-import {
-  Client,
-  ConnectionError,
-  PostgresError,
-  TransactionError,
-} from "https://deno.land/x/postgres@v0.17.0/mod.ts";
+import { Model } from "https://deno.land/x/denodb/mod.ts";
 import ColorTile from "../components/ColorTile.tsx";
+import db from "../database/db.ts";
+import Color from '../database/models/Color.ts';
 
-const databaseUrl = Deno.env.get("DATABASE_URL");
-const client = new Client(databaseUrl);
+const client = db.getClient();
 
 interface RandomColor {
-  colors: string[];
-  now: string;
+  colors: Model[];
 }
 
 const NUM_COLORS = 5;
@@ -23,39 +17,27 @@ const NUM_COLORS = 5;
 
 export const handler: Handlers<RandomColor> = {
   async GET(_, ctx) {
-    const colors = [];
     for (let i = 0; i < NUM_COLORS; i++) {
       const randomColorPayload = await fetch(
         "https://kyletolle-random-color-api.deno.dev/",
       );
       if (randomColorPayload.status !== 200) {
-        const defaultColor = "#FFF";
-        console.warn("Color fetch did not work; falling back to white");
-        colors.push(defaultColor);
+        console.warn("Color fetch did not work");
         continue;
       }
 
       const randomColor = await randomColorPayload.text();
-      colors.push(randomColor);
+      Color.create([{ hex_value: randomColor }])
     }
 
-    let now = "DB query didn't work";
-    await client.connect();
+     let colors: Model[] = [];
+     try {
+      colors = await Color.all();
+     } catch (error) {
+      console.warn('Could not get colors from DB');
+     }
 
-    // TODO: Create the database, catch error if created?
-    // TODO: Create the table, catch error if created?
-
-    try {
-      const results = await client.queryArray<[Date]>("SELECT NOW()");
-      now = results.rows[0][0].toLocaleString();
-      console.log("Now is", now);
-    } catch (err) {
-      console.error("error executing query:", err);
-    } finally {
-      await client.end();
-    }
-
-    return ctx.render({ colors, now });
+    return ctx.render({ colors });
   },
 };
 
@@ -68,7 +50,7 @@ export default function Home({ data }: PageProps<RandomColor>) {
       {/* <Counter start={3} /> */}
       <p>Here should be {NUM_COLORS} color tiles...</p>
       <div style={{ display: "flex" }}>
-        {data.colors.map((color) => <ColorTile color={color} />)}
+        {data.colors.map((color) => <ColorTile color={color.hex_value as string} />)}
       </div>
       <p>The time is currently {data.now}</p>
     </div>
