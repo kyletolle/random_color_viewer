@@ -2,9 +2,7 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import { Model } from "https://deno.land/x/denodb/mod.ts";
 import ColorTile from "../components/ColorTile.tsx";
 import db from "../database/db.ts";
-import Color from '../database/models/Color.ts';
-
-const client = db.getClient();
+import Color from "../database/models/Color.ts";
 
 interface RandomColor {
   colors: Model[];
@@ -27,15 +25,15 @@ export const handler: Handlers<RandomColor> = {
       }
 
       const randomColor = await randomColorPayload.text();
-      Color.create([{ hex_value: randomColor }])
+      Color.create([{ hex_value: randomColor }]);
     }
 
-     let colors: Model[] = [];
-     try {
+    let colors: Model[] = [];
+    try {
       colors = await Color.all();
-     } catch (error) {
-      console.warn('Could not get colors from DB');
-     }
+    } catch (error) {
+      console.warn("Could not get colors from DB");
+    }
 
     return ctx.render({ colors });
   },
@@ -47,8 +45,10 @@ export default function Home({ data }: PageProps<RandomColor>) {
       <p class="my-6">
         Welcome to random_color_viewer!
       </p>
-      <div style={{ display: "flex", flexWrap: 'wrap' }}>
-        {data.colors.map((color) => <ColorTile color={color.hex_value as string} />)}
+      <div style={{ display: "flex", flexWrap: "wrap" }}>
+        {data.colors.map((color) => (
+          <ColorTile color={color.hex_value as string} />
+        ))}
       </div>
     </div>
   );
