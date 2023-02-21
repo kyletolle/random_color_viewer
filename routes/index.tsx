@@ -28,14 +28,14 @@ export const handler: Handlers<RandomColor> = {
       try {
         await Color.create([{ hex_value: randomColor }]);
       } catch (error) {
-        console.error('Could not create color', { randomColor, error });
+        console.error("Could not create color", { randomColor, error });
         continue;
       }
     }
 
     let colors: Model[] = [];
     try {
-      colors = await Color.orderBy('updated_at', 'desc').all();
+      colors = await Color.orderBy("updated_at", "desc").all();
     } catch (error) {
       console.warn("Could not get colors from DB");
     }
@@ -47,13 +47,26 @@ export const handler: Handlers<RandomColor> = {
 export default function Home({ data }: PageProps<RandomColor>) {
   return (
     <div class="p-4 mx-auto max-w-screen-2xl">
-      <p class="my-6">
-        Welcome to random_color_viewer!
+      <p>
+        Welcome to{" "}
+        <a
+          href="https://github.com/kyletolle/random_color_viewer"
+          class="underline"
+        >
+          random_color_viewer
+        </a>!
       </p>
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
+      <div class="my-6" style={{ display: "flex", flexWrap: "wrap" }}>
         {data.colors.map((color) => (
-          <ColorTile color={color.hex_value as string} />
+          <ColorTile color={color.hex_value?.toString() || ""} />
         ))}
+      </div>
+      <div>
+        <p class="text-center">
+          a <a href="https://www.kyletolle.com" class="underline">Kyle Tolle</a>
+          {" "}
+          project
+        </p>
       </div>
     </div>
   );
