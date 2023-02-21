@@ -25,7 +25,12 @@ export const handler: Handlers<RandomColor> = {
       }
 
       const randomColor = await randomColorPayload.text();
-      await Color.create([{ hex_value: randomColor }]);
+      try {
+        await Color.create([{ hex_value: randomColor }]);
+      } catch (error) {
+        console.error('Could not create color', { randomColor, error });
+        continue;
+      }
     }
 
     let colors: Model[] = [];
