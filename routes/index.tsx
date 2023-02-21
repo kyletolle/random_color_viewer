@@ -1,10 +1,9 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-// import Counter from "../islands/Counter.tsx";
-import { config } from "https://deno.land/std@0.145.0/dotenv/mod.ts";
+import { config } from "https://deno.land/x/dotenv/mod.ts";
 import { Client,
   ConnectionError,
   PostgresError,
-  TransactionError, } from "https://deno.land/x/postgres@v0.16.1/mod.ts";
+  TransactionError, } from "https://deno.land/x/postgres@v0.17.0/mod.ts";
 import ColorTile from "../components/ColorTile.tsx";
 
 const envConfig = await config();
