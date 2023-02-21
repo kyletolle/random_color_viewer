@@ -1,6 +1,3 @@
-/** @jsx h */
-import { h } from "preact";
-import { tw } from "@twind";
 import { Handlers, PageProps } from "$fresh/server.ts";
 // import Counter from "../islands/Counter.tsx";
 import { config } from "https://deno.land/std@0.145.0/dotenv/mod.ts";
@@ -62,8 +59,8 @@ export const handler: Handlers<RandomColor> = {
 
 export default function Home({ data }: PageProps<RandomColor>) {
   return (
-    <div class={tw`p-4 mx-auto max-w-screen-md`}>
-      <p class={tw`my-6`}>
+    <div class="p-4 mx-auto max-w-screen-md">
+      <p class="my-6">
         Welcome to random_color_viewer!
       </p>
       {/* <Counter start={3} /> */}
