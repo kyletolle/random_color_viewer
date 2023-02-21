@@ -41,7 +41,7 @@ export const handler: Handlers<RandomColor> = {
 
 export default function Home({ data }: PageProps<RandomColor>) {
   return (
-    <div class="p-4 mx-auto max-w-screen-md">
+    <div class="p-4 mx-auto max-w-screen-lg">
       <p class="my-6">
         Welcome to random_color_viewer!
       </p>
