@@ -30,7 +30,7 @@ export const handler: Handlers<RandomColor> = {
 
     let colors: Model[] = [];
     try {
-      colors = await Color.all();
+      colors = await Color.orderBy('updated_at', 'desc').all();
     } catch (error) {
       console.warn("Could not get colors from DB");
     }
