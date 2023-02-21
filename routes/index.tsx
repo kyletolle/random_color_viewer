@@ -25,7 +25,7 @@ export const handler: Handlers<RandomColor> = {
       }
 
       const randomColor = await randomColorPayload.text();
-      Color.create([{ hex_value: randomColor }]);
+      await Color.create([{ hex_value: randomColor }]);
     }
 
     let colors: Model[] = [];
