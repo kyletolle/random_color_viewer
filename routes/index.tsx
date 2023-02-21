@@ -1,5 +1,5 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { config } from "https://deno.land/x/dotenv/mod.ts";
+import "https://deno.land/std@0.177.0/dotenv/load.ts";
 import {
   Client,
   ConnectionError,
@@ -8,8 +8,7 @@ import {
 } from "https://deno.land/x/postgres@v0.17.0/mod.ts";
 import ColorTile from "../components/ColorTile.tsx";
 
-const envConfig = await config();
-const databaseUrl = envConfig.DATABASE_URL || Deno.env.get("DATABASE_URL");
+const databaseUrl = Deno.env.get("DATABASE_URL");
 const client = new Client(databaseUrl);
 
 interface RandomColor {
